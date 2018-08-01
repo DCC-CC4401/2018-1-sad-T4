@@ -17,7 +17,7 @@
     <div class="row">
       <div class="col-md-6 admin-table-container">
         <h1>Reservas Pendientes</h1>
-        <form action="{% url 'modify' %}" method="post">
+        <form action="{% url 'modify_reservations' %}" method="post">
         {% csrf_token %}
         <table id="reservations-table" class="table table-striped">
 
