@@ -58,3 +58,5 @@ venv/
 **/__pycache__/
 **/db.sqlite3
 db.sqlite3
+**/mainApp/static/mainApp/img/avatars/*
+**/mainApp/static/mainApp/img/items/*
