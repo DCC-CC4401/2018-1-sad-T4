@@ -51,9 +51,13 @@ def signup_submit(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         password = request.POST['password']
+        password_confirm = request.POST['password_confirm']
         rut = request.POST['RUT']
 
-        if User.objects.filter(email = email).exists():
+        if password != password_confirm:
+            messages.warning(request, 'Las contraseñas deben ser iguales.')
+            return redirect('/user/signup/')
+        elif User.objects.filter(email = email).exists():
             messages.warning(request, 'Ya existe una cuenta con ese correo.')
             return redirect('/user/signup/')
         elif User.objects.filter(rut = rut).exists():
