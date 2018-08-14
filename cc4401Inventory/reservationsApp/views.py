@@ -3,6 +3,18 @@ from .models import Reservation
 from django.contrib import messages
 
 
+def show(request, reservation_id):
+    if request.method == 'GET':
+        reservation = Reservation.objects.get(id=reservation_id)
+        context = {
+            'reservation': reservation
+        }
+        if reservation.state == 'P':
+            return render(request, 'reservation_data.html', context=context)
+        else:
+            return redirect('landing_articles')
+
+
 def delete(request):
     if request.method == 'POST':
         reservation_ids = request.POST.getlist('reservation')
