@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'loansApp.apps.LoansappConfig',
     'adminApp.apps.AdminappConfig',
     'usersApp.apps.UsersappConfig',
+    'spaceReservationsApp.apps.SpacereservationsappConfig',
     'bootstrap4',
 ]
 
