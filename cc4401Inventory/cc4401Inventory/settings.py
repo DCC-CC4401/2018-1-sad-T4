@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'adminApp.apps.AdminappConfig',
     'usersApp.apps.UsersappConfig',
     'spaceReservationsApp.apps.SpacereservationsappConfig',
+    'articleReservationsApp.apps.ArticlereservationsappConfig',
     'bootstrap4',
 ]
 
