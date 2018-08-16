@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from articlesApp.models import Article
-from loansApp.models import Loan
+from articleReservationsApp.models import ArticleReservation
 from django.db import models
 from datetime import datetime, timedelta
 
@@ -17,7 +17,7 @@ def article_data(request, article_id):
     try:
         article = Article.objects.get(id=article_id)
 
-        last_loans = Loan.objects.filter(article=article,
+        last_loans = ArticleReservation.objects.filter(article=article,
                                          ending_date_time__lt=datetime.now(tz=pytz.utc)
                                          ).order_by('-ending_date_time')[:10]
 
@@ -75,7 +75,7 @@ def article_request(request):
                 elif not verificar_horario_habil(start_date_time) and not verificar_horario_habil(end_date_time):
                     messages.warning(request, 'Los pedidos deben ser hechos en horario hábil.')
                 else:
-                    loan = Loan(article=article, starting_date_time=start_date_time, ending_date_time=end_date_time,
+                    loan = ArticleReservation(article=article, starting_date_time=start_date_time, ending_date_time=end_date_time,
                                 user=request.user)
                     loan.save()
                     messages.success(request, 'Pedido realizado con éxito')
