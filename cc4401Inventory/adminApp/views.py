@@ -6,8 +6,9 @@ from articlesApp.models import Article
 from spacesApp.models import Space
 from mainApp.models import User
 from datetime import datetime, timedelta, date
-import pytz
+import pytz, os
 from django.utils.timezone import localtime
+
 
 @login_required
 def user_panel(request):
@@ -100,3 +101,22 @@ def actions_panel(request):
         'actual_monday': monday
     }
     return render(request, 'actions_panel.html', context)
+
+
+
+
+
+def add_item(request):
+
+    if request.method == "POST":
+        r_name = request.POST["name"] ##Obligatorio
+        r_uploaded_file = request.FILES['file']
+        r_extension = os.path.splitext(r_uploaded_file.name)[1]
+        r_description = request.POST["description"]
+        new_art = Article.objects.create(name=r_name, description = r_description)
+        new_art.state='D'
+        new_art.save()
+        new_art.image.save(str(new_art.id)+"_image"+r_extension, r_uploaded_file)
+        new_art.save()
+
+    return redirect("/admin/items-panel/")

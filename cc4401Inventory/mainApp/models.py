@@ -85,7 +85,9 @@ class Action(models.Model):
     STATES = (
         ('A', 'Aceptado'),
         ('R', 'Rechazado'),
-        ('P', 'Pendiente')
+        ('P', 'Pendiente'),
+        ('L', 'Perdido'),
+        ('E', 'Recibido'),
     )
     starting_date_time = models.DateTimeField()
     ending_date_time = models.DateTimeField()

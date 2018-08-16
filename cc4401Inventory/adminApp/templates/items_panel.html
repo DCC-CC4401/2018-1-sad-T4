@@ -35,7 +35,10 @@
             <th scope="col">ID</th>
             <th scope="col">Nombre del Articulo</th>
             <th scope="col">Estado</th>
-            <th scope="col"></th>
+            <th scope="col" style="text-align:center;">
+              <a href="" class="table-button add-button" data-toggle="modal" data-target="#editName">
+              <i class="fas fa-plus-circle"></i>
+            </a></th>
           </tr>
           </thead>
           <tbody>
@@ -53,6 +56,10 @@
           </tbody>
         </table>
       </div>
+
+
+
+
       <div class="col-md-6 admin-table-container">
         <h1>Espacios</h1>
         <table class="table table-striped">
@@ -82,5 +89,39 @@
     </div>
   </div>
 </div>
+
+
+
+<div class="modal fade" id="editName" tabindex="-1" role="dialog" aria-labelledby="editNameLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editNameLabel">Crear Nuevo Artículo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form action="add-item/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+      <div class="modal-body">
+        <input name="name" class="form-control" type="text" placeholder="Ingrese Nombre">
+        <br>
+        <label for="id_file">Subir Imagen</label>
+        <input type="file" class="form-control-file" id="id_file" name="file">
+        <br>
+        <textarea name="description" class="form-control" id="textarea1" rows="4"
+        placeholder="Ingrese Descripcion del articulo"></textarea>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
 </div>
 {% endblock %}

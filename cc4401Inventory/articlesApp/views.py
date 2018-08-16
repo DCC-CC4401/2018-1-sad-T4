@@ -5,6 +5,7 @@ from loansApp.models import Loan
 from django.db import models
 from datetime import datetime, timedelta
 
+
 import random, os
 import pytz
 from django.contrib import messages
@@ -115,7 +116,7 @@ def article_edit_name(request, article_id):
 @login_required
 def article_edit_image(request, article_id):
 
-    if request.method == "POST":
+    if request.method == "POST":        
         u_file = request.FILES["image"]
         extension = os.path.splitext(u_file.name)[1]
         a = Article.objects.get(id=article_id)
