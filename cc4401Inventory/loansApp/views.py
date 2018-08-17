@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from loansApp.models import Loan
+from articleReservationsApp.models import ArticleReservation
 
 
 def show(request, loan_id):
     if request.method == 'GET':
-        loan = Loan.objects.get(id=loan_id)
+        loan = ArticleReservation.objects.get(id=loan_id)
         context = {
             'loan': loan
         }
