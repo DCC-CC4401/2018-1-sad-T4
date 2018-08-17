@@ -7,3 +7,4 @@ urlpatterns = [
     path('spaces/', views.landing_spaces, name='landing_spaces'),
     path('search/', views.search, name='search'),
 ]
+
