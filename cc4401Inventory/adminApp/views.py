@@ -58,7 +58,7 @@ def actions_panel(request):
             if request.GET["filter"]=='vigentes':
                 loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
             elif request.GET["filter"]=='caducados':
-                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='P').order_by('starting_date_time')
+                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
             elif request.GET["filter"]=='perdidos':
                 loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='L').order_by('starting_date_time')
             else:

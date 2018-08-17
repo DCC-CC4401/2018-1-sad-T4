@@ -116,7 +116,7 @@ def article_edit_name(request, article_id):
 @login_required
 def article_edit_image(request, article_id):
 
-    if request.method == "POST":        
+    if request.method == "POST":
         u_file = request.FILES["image"]
         extension = os.path.splitext(u_file.name)[1]
         a = Article.objects.get(id=article_id)
@@ -135,3 +135,16 @@ def article_edit_description(request, article_id):
         a.save()
 
     return redirect('/article/' + str(article_id) + '/edit')
+
+@login_required
+def article_delete(request, article_id):
+    if not request.user.is_staff:
+        return redirect('/')
+    try:
+        article = Article.objects.get(id=article_id)
+        article.delete()
+        article.save()
+        return redirect('items-panel')
+    except Exception as e:
+        print(e)
+        return redirect('items-panel')
