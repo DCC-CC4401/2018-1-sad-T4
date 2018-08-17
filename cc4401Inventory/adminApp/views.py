@@ -106,7 +106,7 @@ def actions_panel(request):
 
 
 
-def add_item(request):
+def add_article(request):
 
     if request.method == "POST":
         r_name = request.POST["name"] ##Obligatorio
@@ -119,4 +119,13 @@ def add_item(request):
         new_art.image.save(str(new_art.id)+"_image"+r_extension, r_uploaded_file)
         new_art.save()
 
+    return redirect("/admin/items-panel/")
+
+def add_space(request):
+    if request.method == "POST":
+        r_name = request.POST["name"] ##Obligatorio
+        r_description = request.POST["description"]
+        new_art = Space.objects.create(name=r_name, description = r_description)
+        new_art.state='D'
+        new_art.save()
     return redirect("/admin/items-panel/")
