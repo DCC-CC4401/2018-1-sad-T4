@@ -1,9 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.timezone import localtime
 import datetime
 from articlesApp.models import Article
 from spaceReservationsApp.models import SpaceReservation
 from django.contrib.auth.decorators import login_required
+
+@login_required
+def landing_redirect(request):
+    context = {}
+    if not request.user.is_staff:
+        return landing_articles(request)
+    else:
+        return redirect('landing-panel')
 
 
 @login_required
