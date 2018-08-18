@@ -1,16 +1,33 @@
 from django.shortcuts import render, redirect
 from spaceReservationsApp.models import SpaceReservation
+from articleReservationsApp.models import ArticleReservation
 from django.contrib import messages
 
 
-def show(request, reservation_id):
+def show_space_reservation(request, reservation_id):
     if request.method == 'GET':
         reservation = SpaceReservation.objects.get(id=reservation_id)
         context = {
-            'reservation': reservation
+            'reservation': reservation,
+            'item': reservation.space,
+            'item_type': 'space',
         }
         if reservation.state == 'P':
-            return render(request, 'reservation_data.html', context=context)
+            return render(request, 'reservationsApp/reservation_data.html', context=context)
+        else:
+            return redirect('landing_articles')
+
+
+def show_article_reservation(request, reservation_id):
+    if request.method == 'GET':
+        reservation = ArticleReservation.objects.get(id=reservation_id)
+        context = {
+            'reservation': reservation,
+            'item': reservation.article,
+            'item_type': 'article',
+        }
+        if reservation.state == 'P':
+            return render(request, 'reservationsApp/reservation_data.html', context=context)
         else:
             return redirect('landing_articles')
 

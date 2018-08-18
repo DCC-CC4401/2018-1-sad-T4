@@ -16,21 +16,21 @@
         <h1 class="article-name">
             Usuario: {{ reservation.user.get_full_name }}
         <br>
-          {{ reservation.space.name }}
+          {{ item.name }}
 
-        {% if reservation.space.state == "D" %}
-            <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  reservation.space.get_state_display }}</span>
+          {% if reservation.space.state == "D" %}
+            <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
           {% elif reservation.space.state == "P" %}
-            <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  reservation.space.get_state_display }}</span>
+            <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
           {% elif reservation.space.state == "R" %}
-            <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  reservation.space.get_state_display }}</span>
+            <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
           {% endif %}
          </h1>
-            </div>
+      </div>
 
 
-        {% if space.image %}
-            <img src= " {% static space.image.url %}" class="img-fluid" alt="Foto" style="height: 400px" />
+        {% if item.image %}
+            <img src= " {% static item.image.url %}" class="img-fluid" alt="Foto" style="height: 400px" />
         {% else %}
             <img class="card-img-top" src="{% static 'img/items/default_space.jpg' %}" alt="Card image cap">
         {% endif %}
@@ -38,7 +38,7 @@
       <div class="card">
         <div class="card-header article-description-title">Descripción</div>
         <div class="card-body">
-          <p class="card-text">{{ reservation.space.description }}</p>
+          <p class="card-text">{{ item.description }}</p>
         </div>
       </div>
 
@@ -47,9 +47,12 @@
 
 
     {% if esAutor %}
-    <form action="" method="post">{% csrf_token %}<input type="submit" value="Borrar" name="borrararticulo">
-       <input type="hidden" name="id" value={{ reserva.id }}></form>
-  {% endif %}
+      <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Borrar" name="borrararticulo">
+        <input type="hidden" name="id" value={{ reserva.id }}>
+      </form>
+    {% endif %}
 
     </div>
 
