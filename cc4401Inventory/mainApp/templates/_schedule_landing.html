@@ -137,33 +137,52 @@
 
 	</div>
 
-  <div class="space-select" id="space-select">
 
-  </div>
-
-
-
-
-	<div class="event-modal">
-		<header class="header">
-			<div class="content">
-				<span class="event-date"></span>
-				<h3 class="event-name"></h3>
-			</div>
-
-			<div class="header-bg"></div>
-		</header>
-
-		<div class="body">
-			<div class="event-info"></div>
-			<div class="body-bg"></div>
-		</div>
-
-		<a href="#0" class="close">Close</a>
-	</div>
 
 	<div class="cover-layer"></div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="resModal" tabindex="-1" role="dialog" aria-labelledby="resModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="make-space-reservations/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="horarios" value="" id="toReserve">
+          <div class="form-group">
+          <label  for="inputGroupSelect01">Seleccionar Espacio a Reservar</label>
+          <select name="espacio" class="custom-select" id="inputGroupSelect01">
+              <option selected value="">---</option>
+              {% for s in spaces %}
+              <option value="{{ s.id }}"> {{s.name}} </option>
+              {% endfor %}
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div> <!-- .cd-schedule -->
+<div class="space-select" id="space-select">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#resModal" onclick="createReservations()">
+    Reservar en horario(s) seleccionado(s)
+  </button>
+
+</div>
 <script src="{% static 'js/modernizr.js' %}"></script>
 <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
 

@@ -1,10 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.timezone import localtime
 import datetime
 from articlesApp.models import Article
+from spacesApp.models import Space
 from spaceReservationsApp.models import SpaceReservation
 from django.contrib.auth.decorators import login_required
 
+import json
 
 @login_required
 def landing_articles(request):
@@ -49,10 +51,12 @@ def landing_spaces(request, date=None):
 
     delta = (datetime.datetime.strptime(current_date, "%Y-%m-%d").isocalendar()[2])-1
     monday = ((datetime.datetime.strptime(current_date, "%Y-%m-%d") - datetime.timedelta(days=delta)).strftime("%d/%m/%Y"))
+    spaces = Space.objects.all()
     context = {'reservations' : res_list,
                'current_date' : current_date,
                'controls' : move_controls,
-               'actual_monday' : monday}
+               'actual_monday' : monday,
+               'spaces' : spaces}
     return render(request, 'espacios.html', context)
 
 
@@ -84,3 +88,30 @@ def search(request):
 
         products = None if (request.GET['query'] == "") else articles
         return landing_search(request, products)
+
+
+
+
+@login_required
+def reserve_spaces(request):
+    if request.method == "POST":
+        horarios = json.loads(request.POST["horarios"])
+        espacio = request.POST["espacio"]
+        print("############################\n")
+        print(espacio)
+        print("############################\n")
+        espacio_a_reservar = Space.objects.get(pk=espacio)
+        print(horarios)
+        for h in horarios:
+
+            di = datetime.datetime.strptime(h['dti'], "%Y-%m-%d %H:%M")
+            df = datetime.datetime.strptime(h['dtf'], "%Y-%m-%d %H:%M")
+            r = SpaceReservation()
+            r.space = espacio_a_reservar
+            r.starting_date_time = di
+            r.ending_date_time = df
+            r.user = request.user
+            r.save()
+            pass
+
+        return redirect("/spaces/")

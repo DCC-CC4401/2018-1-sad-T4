@@ -53,5 +53,84 @@ function clickSlot(element){
   }
 }
 
+function createReservations(){
+
+  var space_reservations = [];
+  var block_reservations = [];
+
+  for (i = 0; i <5; i++){
+    var bini = null;
+    var blen = null;
+
+    var started_res = false;
+    for(j = 0; j<18; j++){
+
+      if (slotmatrix[i][j] == 0 || j == 17) {
+        if(started_res){
+          started_res = false;
+          blen = j == 17 ? blen+1 : blen;
+          block_reservations.push({d:i, ini:bini, len:blen});
+        } else {
+          if (j==17 && slotmatrix[i][j] == 1) {block_reservations.push({d:i, ini:j, len:1});}
+          continue;
+        }
+      } else {
+        if(started_res){
+          blen += 1;
+        } else {
+          bini = j;
+          blen = 1;
+          started_res = true;
+
+
+        }
+      }
+
+    }
+    started_res = false;
+  }
+
+
+  for(index in block_reservations){
+    var res = block_reservations[index];
+    var weekday = getMonday();
+    weekday.setDate( weekday.getDate() + res.d)
+
+    weekday.setHours(9)
+    weekday.setMinutes(0)
+    weekday.setSeconds(0);weekday.setMilliseconds(0);
+    //fecha inicio:
+    weekday.setTime(weekday.getTime() + 1000*60*30*res.ini)
+    dt_inicio = convertUTCDateToLocalDate(new Date(weekday.getTime())).toISOString().substr(0,16)
+    dt_inicio = dt_inicio.substr(0,10)+" "+dt_inicio.substr(11)
+    //fecha termino:
+    weekday.setTime(weekday.getTime() + 1000*60*30*res.len)
+    dt_fin = convertUTCDateToLocalDate(new Date(weekday.getTime())).toISOString().substr(0,16)
+    dt_fin = dt_fin.substr(0,10)+" "+dt_fin.substr(11)
+
+    space_reservations.push({dti:dt_inicio, dtf:dt_fin})
+    document.getElementById("toReserve").setAttribute("value", JSON.stringify(space_reservations))
+  }
+
+
+  console.log(space_reservations)
+}
+
+function getMonday() {
+  d = new Date();
+  var day = d.getDay(),
+      diff = d.getDate() - day + (day == 0 ? -6 : 1);
+  return new Date(d.setDate(diff));
+}
+function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate;
+}
 
 create_selectable_slots()
