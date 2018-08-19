@@ -1,6 +1,7 @@
 {% load static %}
 <head>
     <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
+    <link rel="stylesheet" href="{% static 'mainApp/css/gridfilter.css' %}">
 </head>
 <div class="cd-schedule loading">
 	<div class="timeline" id="timeline">
@@ -34,10 +35,10 @@
 			<li class="events-group">
 				<div class="top-info"><span>Lunes</span></div>
 
-				<ul>
+				<ul id="gridlist0">
 					{% for r in reservations.0 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
 						<a href="">
 							<em class="event-name">{{r.0}}</em>
 						</a>
@@ -51,11 +52,11 @@
 			<li class="events-group">
 				<div class="top-info"><span>Martes</span></div>
 
-				<ul>
+				<ul id="gridlist1">
 
 					{% for r in reservations.1 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
 						<a href="">
 							<em class="event-name">{{r.0}}</em>
 						</a>
@@ -68,10 +69,10 @@
 			<li class="events-group">
 				<div class="top-info"><span>Miércoles</span></div>
 
-				<ul>
+				<ul id="gridlist2">
 					{% for r in reservations.2 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" >
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
 						<a href="">
 							<em class="event-name">{{r.0}}</em>
 						</a>
@@ -84,12 +85,12 @@
 			<li class="events-group">
 				<div class="top-info"><span>Jueves</span></div>
 
-				<ul>
+				<ul id="gridlist3">
 					{% for r in reservations.3 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}">
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}" sname="{{r.0}}">
 						<a href="">
-							<em class="event-name">{{r.0}}</em>
+							<em class="event-name">{{r.0}} </em>
 						</a>
 					</li>
 
@@ -100,10 +101,10 @@
 			<li class="events-group">
 				<div class="top-info"><span>Viernes</span></div>
 
-				<ul>
+				<ul id="gridlist4">
 					{% for r in reservations.4 %}
 
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}">
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
 						<a href="">
 							<em class="event-name">{{r.0}}</em>
 						</a>
@@ -117,9 +118,10 @@
 	</div>
 
 
+<div>
 
 	<div class="week-select" id="week-select">
-		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 200px; font-size: 18px">
+		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 200px; font-size: 18px; margin-bottom:20px;">
 			<form action="" method="get" class="selectform">
 				<a href="?date={{controls.0}}" role="button"><i class="fas fa-angle-double-left"></i></a>
 			</form>
@@ -133,33 +135,72 @@
 				<a href="?date={{controls.3}}" role="button"><i class="fas fa-angle-double-right"></i></a>
 			</form>
 		</div>
+    <div class="row">
+      <div class="col-7">
+        <div class="space-select-list">
+        {% for s in spaces %}
+          <span class="SpcSelectListElement" ><i class="far fa-circle" id="s{{s.id}}_selector"></i>{{s.name}}</span>
 
+        {% endfor %}
+      </div>
+      </div>
+        <div class="col-2">
+    <div class="space-select" id="space-select">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#resModal" onclick="createReservations()">
+        Reservar en horario(s) seleccionado(s)
+      </button>
+    </div>
+    </div>
+  </div>
 	</div>
 
-
-
-
-	<div class="event-modal">
-		<header class="header">
-			<div class="content">
-				<span class="event-date"></span>
-				<h3 class="event-name"></h3>
-			</div>
-
-			<div class="header-bg"></div>
-		</header>
-
-		<div class="body">
-			<div class="event-info"></div>
-			<div class="body-bg"></div>
-		</div>
-
-		<a href="#0" class="close">Close</a>
-	</div>
+</div>
 
 	<div class="cover-layer"></div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="resModal" tabindex="-1" role="dialog" aria-labelledby="resModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="make-space-reservations/" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="horarios" value="" id="toReserve">
+          <div class="form-group">
+          <label  for="inputGroupSelect01">Seleccionar Espacio a Reservar</label>
+          <select name="espacio" class="custom-select" id="inputGroupSelect01">
+              <option value=""> --- </option>
+              {% for s in spaces %}
+              <option value="{{ s.id }}"> {{s.name}} </option>
+              {% endfor %}
+          </select>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" >Save changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div> <!-- .cd-schedule -->
+
+
+<script type="text/javascript">
+var actual_monday = "{{actual_monday}}"
+</script>
 <script src="{% static 'js/modernizr.js' %}"></script>
 <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
 
 <script src="{% static 'js/main.js' %}"></script> <!-- Resource jQuery -->
+<script src="{% static 'js/gridfilter.js' %}"></script>
