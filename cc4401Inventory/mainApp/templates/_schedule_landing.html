@@ -176,7 +176,7 @@
           <div class="form-group">
           <label  for="inputGroupSelect01">Seleccionar Espacio a Reservar</label>
           <select name="espacio" class="custom-select" id="inputGroupSelect01">
-              <option selected value="">---</option>
+              <option value=""> --- </option>
               {% for s in spaces %}
               <option value="{{ s.id }}"> {{s.name}} </option>
               {% endfor %}
@@ -196,7 +196,9 @@
 </div> <!-- .cd-schedule -->
 
 
-
+<script type="text/javascript">
+var actual_monday = "{{actual_monday}}"
+</script>
 <script src="{% static 'js/modernizr.js' %}"></script>
 <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
 

@@ -5,7 +5,7 @@ from articlesApp.models import Article
 from spacesApp.models import Space
 from spaceReservationsApp.models import SpaceReservation
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 import json
 
 @login_required
@@ -95,13 +95,19 @@ def search(request):
 @login_required
 def reserve_spaces(request):
     if request.method == "POST":
-        horarios = json.loads(request.POST["horarios"])
+        horarios = ''
+        try:
+            horarios = json.loads(request.POST["horarios"])
+        except Exception as e:
+            messages.warning(request, 'Debe seleccionarse al menos 1 celda para hacer la reservación del espacio.')
+            return redirect("/spaces/")
         espacio = request.POST["espacio"]
-        print("############################\n")
-        print(espacio)
-        print("############################\n")
-        espacio_a_reservar = Space.objects.get(pk=espacio)
-        print(horarios)
+        try:
+            espacio_a_reservar = Space.objects.get(pk=espacio)
+        except Exception as e:
+            messages.warning(request, 'Debe seleccionarse el espacio donde hacer la reservación.')
+            return redirect("/spaces/")
+
         for h in horarios:
 
             di = datetime.datetime.strptime(h['dti'], "%Y-%m-%d %H:%M")
@@ -113,5 +119,5 @@ def reserve_spaces(request):
             r.user = request.user
             r.save()
             pass
-
+        messages.success(request, 'Reservación realizada con éxito.')
         return redirect("/spaces/")

@@ -14,6 +14,7 @@ for (i = 0; i <5; i++){
 var selected_filter = {}
 var nombres = {}
 
+
 function create_space_filter(){
    var f = document.getElementsByClassName("SpcSelectListElement");
 
@@ -133,7 +134,8 @@ function createReservations(){
   }
   for(index in block_reservations){
     var res = block_reservations[index];
-    var weekday = getMonday();
+    var act_m = actual_monday.split("/")
+    var weekday = new Date(act_m[1]+"/"+act_m[0]+"/"+act_m[2])
     //Conversion a un formato entendible por el modelo:
     weekday.setDate( weekday.getDate() + res.d)
     weekday.setHours(9);weekday.setMinutes(0);
