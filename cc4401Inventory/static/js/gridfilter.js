@@ -11,7 +11,56 @@ for (i = 0; i <5; i++){
     slotmatrix[i].push(0);
   }
 }
+var selected_filter = {}
+var nombres = {}
 
+function create_space_filter(){
+   var f = document.getElementsByClassName("SpcSelectListElement");
+
+   for (index in f){
+     var child = f[index].children[0].id
+     var ch_id = child[1]
+     var ch_name = f[index].innerText
+     selectorNode = document.getElementById(child)
+     selectorNode.parentElement.addEventListener("click", clickFilter)
+     nombres[child] = ch_name;
+
+
+   }
+}
+
+function clickFilter(element){
+  if(element.target.nodeName=="I"){
+    if(element.target.className=="fas fa-circle"){
+      delete selected_filter[element.target.id]
+      element.target.className = "far fa-circle"
+    } else {
+        selected_filter[element.target.id] = nombres[element.target.id]
+        element.target.className = "fas fa-circle"
+    }
+  }
+
+  var allNodes = document.querySelectorAll('[sname]')
+  if(isEmpty(selected_filter)){
+    for(i = 0; i<allNodes.length; i++){
+    allNodes[i].style.display = null;
+    }
+  } else {
+    for(i = 0; i<allNodes.length; i++){
+      hide = true;
+      var space_name = allNodes[i].attributes.sname.nodeValue
+      for(j in selected_filter){
+        if (selected_filter[j]==space_name) {
+          hide = false
+        }
+      }
+      allNodes[i].style.display = hide ? "none" : null;
+      hide = true;
+    }
+
+  }
+  console.log(selected_filter)
+}
 
 function create_selectable_slots(){
     var slots = document.getElementById('gridlist0');
@@ -20,7 +69,7 @@ function create_selectable_slots(){
     var slotWidth = slots.offsetWidth;
     //GENERATE SELECTABLE SLOTS
     for (i = 0; i <5; i++){
-      var dia = document.getElementById("gridlist"+i)
+      var day = document.getElementById("gridlist"+i)
       for(j = 0; j<18; j++){
         var listNode = document.createElement("LI")
         var listDiv = document.createElement("div")
@@ -30,12 +79,10 @@ function create_selectable_slots(){
         listDiv.style.height = slotHeight+"px";
         listDiv.addEventListener("click",clickSlot)
         listNode.appendChild(listDiv)
-        dia.appendChild(listNode)
+        day.appendChild(listNode)
 
       }
-    }
-    //slots.appendChild(document.createElement("LI").appendChild(document.createTextNode("holis")))
-
+   }
 }
 
 function clickSlot(element){
@@ -54,24 +101,22 @@ function clickSlot(element){
 }
 
 function createReservations(){
-
   var space_reservations = [];
   var block_reservations = [];
-
   for (i = 0; i <5; i++){
     var bini = null;
     var blen = null;
-
     var started_res = false;
     for(j = 0; j<18; j++){
-
       if (slotmatrix[i][j] == 0 || j == 17) {
         if(started_res){
           started_res = false;
           blen = j == 17 ? blen+1 : blen;
           block_reservations.push({d:i, ini:bini, len:blen});
         } else {
-          if (j==17 && slotmatrix[i][j] == 1) {block_reservations.push({d:i, ini:j, len:1});}
+          if (j==17 && slotmatrix[i][j] == 1) {
+            block_reservations.push({d:i, ini:j, len:1});
+            }
           continue;
         }
       } else {
@@ -81,23 +126,17 @@ function createReservations(){
           bini = j;
           blen = 1;
           started_res = true;
-
-
         }
       }
-
     }
     started_res = false;
   }
-
-
   for(index in block_reservations){
     var res = block_reservations[index];
     var weekday = getMonday();
+    //Conversion a un formato entendible por el modelo:
     weekday.setDate( weekday.getDate() + res.d)
-
-    weekday.setHours(9)
-    weekday.setMinutes(0)
+    weekday.setHours(9);weekday.setMinutes(0);
     weekday.setSeconds(0);weekday.setMilliseconds(0);
     //fecha inicio:
     weekday.setTime(weekday.getTime() + 1000*60*30*res.ini)
@@ -107,15 +146,13 @@ function createReservations(){
     weekday.setTime(weekday.getTime() + 1000*60*30*res.len)
     dt_fin = convertUTCDateToLocalDate(new Date(weekday.getTime())).toISOString().substr(0,16)
     dt_fin = dt_fin.substr(0,10)+" "+dt_fin.substr(11)
-
     space_reservations.push({dti:dt_inicio, dtf:dt_fin})
     document.getElementById("toReserve").setAttribute("value", JSON.stringify(space_reservations))
   }
-
-
-  console.log(space_reservations)
 }
 
+
+//AUXILIARY FUNCTIONS
 function getMonday() {
   d = new Date();
   var day = d.getDay(),
@@ -132,5 +169,14 @@ function convertUTCDateToLocalDate(date) {
 
     return newDate;
 }
+function isEmpty( obj ) {
+  for ( var prop in obj ) {
+    return false;
+  }
+  return true;
+}
 
+
+//'MAIN'
 create_selectable_slots()
+create_space_filter()
