@@ -1,0 +1,67 @@
+
+{% extends 'application_layout.html' %}
+
+{% load static %}
+
+{% block title %}
+  Ficha de Reserva
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-md-4">
+      <h1 class="article-name">
+        Detalles de la Reserva de {{ item.name }}
+
+        {% if item.state == "D" %}
+          <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+        {% elif item.state == "P" %}
+          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+        {% elif item.state == "R" %}
+          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+        {% endif %}
+       </h1>
+
+      <h4>Usuario: {{ reservation.user.get_full_name }}</h4>
+
+      <h4>Inicio de la Reserva: </h4> {{  reservation.starting_date_time }}
+      <h4>Fin de la Reserva:</h4> {{ reservation.ending_date_time }}
+
+      {% if correct_user %}
+        <h5>¿Te arrepentiste? Aún puedes cancelar! :)</h5>
+        {% if item_type == 'space' %}
+          <form action="{% url 'delete_space_reservation' %}" method="post">
+        {% else %}
+          <form action="{% url 'delete_article_reservation' %}" method="post">
+        {% endif %}
+          {% csrf_token %}
+          <input type="hidden" name="reservation" value={{ reservation.id }}>
+          <input type="submit" value="Borrar">
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6 offset-md-1">
+
+      <div class="card">
+        {% if item.image %}
+            <img class="card-img-top" src="{% static item.image.url %}">
+        {% else %}
+            <img class="card-img-top" src="{% static 'img/items/default_space.jpg' %}">
+        {% endif %}
+
+        <div class="card-header article-description-title">Descripción de {{ item.name }}</div>
+        <div class="card-body">
+          <p class="card-text">{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
