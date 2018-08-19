@@ -6,5 +6,5 @@ urlpatterns = [
     path('articles/', views.landing_articles, name='landing_articles'),
     path('spaces/', views.landing_spaces, name='landing_spaces'),
     path('search/', views.search, name='search'),
+    path('spaces/make-space-reservations/', views.reserve_spaces, name="reserve_spaces")
 ]
-
