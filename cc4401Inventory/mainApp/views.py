@@ -120,12 +120,17 @@ def reserve_spaces(request):
 
             di = datetime.datetime.strptime(h['dti'], "%Y-%m-%d %H:%M")
             df = datetime.datetime.strptime(h['dtf'], "%Y-%m-%d %H:%M")
+            actual_time = datetime.datetime.now()
             r = SpaceReservation()
             r.space = espacio_a_reservar
+            if (di - datetime.timedelta(seconds=3600)) < actual_time:
+                messages.warning(request, 'La reserva debe hacerse antes de una hora de su inicio.')
+                return redirect("/spaces/")
             r.starting_date_time = di
             r.ending_date_time = df
             r.user = request.user
             r.save()
             pass
+
         messages.success(request, 'Reservación realizada con éxito.')
         return redirect("/spaces/")
