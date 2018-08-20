@@ -8,6 +8,7 @@ import pytz
 utc=pytz.UTC
 
 
+
 def show_space_loan(request, reservation_id):
     return show_reservation(request, reservation_id, 'space')
 

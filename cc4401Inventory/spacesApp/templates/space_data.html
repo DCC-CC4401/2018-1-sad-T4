@@ -4,59 +4,68 @@
 {% load static %}
 
 {% block title %}
- Editando artículo: {{ article.name }}
+  Ficha del espacio: {{ space.name }}
 {% endblock %}
 
 
 {% block body %}
-<div class = "container" style="margin-top: 20px">
-  <div class="row">
-  <div class="col-md-2">
-  </div>
-    <div class="col-md-8">
 
-      <div class="row"><h1> {{ article.name }}<!-- Button trigger modal -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#editName">
-  <i class="fas fa-edit"></i>
-</button>
-        {% if article.state == "D" %}
-            <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
-          {% elif article.state == "P" %}
-            <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
-          {% elif article.state == "L" %}
-            <span class="badge badge-pill badge-danger"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
-          {% elif article.state == "R" %}
-            <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  article.get_state_display }}</span>
-          {% endif %}
-      </h1>
-      </div>
-
-      <div>
-          {% if article.image %}
-            <img src= " {% static article.image.url %}" class="img-fluid" alt="Foto" style="height: 400px" />
-        {% else %}
-            <img class="card-img-top" src="{% static 'img/items/default_article.jpg' %}" alt="Card image cap">
+  <div class="container">
+   <div class="row">
+    <div class="col-md-10 offset-1">
+      <div class="row">
+        <h1 class="space-name">
+        {% if user.is_staff %}
+        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editName">
+          <i class="fas fa-edit"></i></button>
         {% endif %}
-          <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editImage">
-            <i class="fas fa-edit"></i>
-      </button></div>
-      <div style="margin-bottom: 30px">
-          <div style ="border:1px dashed darkgrey;border-radius: 5px;padding: 5px;height:120px;width:calc(100% - 60px); display: inline-block; overflow: scroll;">{{ article.description }}</div>
-          <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editDescription" style="margin-bottom:1.6rem">
-              <i class="fas fa-edit"></i>
-          </button>
+
+          {{ space.name }}
+        {% if space.state == "D" %}
+            <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  space.get_state_display }}</span>
+          {% elif space.state == "P" %}
+            <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  space.get_state_display }}</span>
+          {% elif space.state == "L" %}
+            <span class="badge badge-pill badge-danger"><i class="fas fa-chevron-left"></i> {{  space.get_state_display }}</span>
+          {% elif space.state == "R" %}
+            <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  space.get_state_display }}</span>
+          {% endif %}
+         </h1>
       </div>
     </div>
-  <div class="col-md-2">
+   </div>
+
+  <div class="row">
+      <div class="col-md-8 offset-1">
+        {% if space.image %}
+            <img src= " {% static space.image.url %}" class="img-fluid" alt="Foto" style="height: 400px" />
+        {% else %}
+            <img class="card-img-top" src="{% static 'img/items/default_space.jpg' %}" alt="Card image cap">
+        {% endif %}
+      {% if user.is_staff %}
+        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editImage">
+          <i class="fas fa-edit"></i></button>
+      {% endif %}
+      </div>
+    <div class="col-md-3">
+      <div class="card">
+          <div class="card-header space-description-title">Descripción</div>
+          <div class="card-body">
+            <p class="card-text">{{ space.description }}</p>
+          </div>
+        {% if user.is_staff %}
+        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#editDescription">
+          <i class="fas fa-edit"></i></button>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    {% include '_schedule_landing.html' %}
+  </div>
   </div>
 
-
-
-  </div>
-
-
-
-    <!---  MODALES PARA EDICION DE LOS CAMPOS --->
+   <!---  MODALES PARA EDICION DE LOS CAMPOS --->
 
 
         <!-- Nombre -->
@@ -64,12 +73,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editNameLabel">Editar Nombre del Artículo</h5>
+            <h5 class="modal-title" id="editNameLabel">Editar Nombre del Espacio</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-            <form action="edit_name" method="post">
+            <form action="{{ space.id }}/edit_name" method="post">
                 {% csrf_token %}
           <div class="modal-body">
             <input name="name" class="form-control" type="text" placeholder="Ingrese Nombre">
@@ -90,12 +99,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editImageLabel">Editar Imagen del Artículo</h5>
+            <h5 class="modal-title" id="editImageLabel">Editar Imagen del Espacio</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-            <form action="edit_image" method="post" enctype="multipart/form-data">
+            <form action="{{ space.id }}/edit_image" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
           <div class="modal-body">
             <label for="editImageControl">Subir Imagen</label>
@@ -115,12 +124,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="editDescriptionLabel">Editar Descripción del Artículo</h5>
+            <h5 class="modal-title" id="editDescriptionLabel">Editar Descripción del Espacio</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-            <form action="edit_description" method="post">
+            <form action="{{ space.id }}/edit_description" method="post">
                 {% csrf_token %}
           <div class="modal-body">
             <div class="form-group">
@@ -137,7 +146,4 @@
       </div>
     </div>
 
-
-</div>
 {% endblock %}
-

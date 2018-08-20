@@ -9,3 +9,5 @@ class Space(Item):
         ('R', 'En reparación')
     )
     state = models.CharField(max_length=1, choices=STATES)
+    def __str__(self):
+        return self.name

@@ -32,7 +32,7 @@
       <h4>Fin de la Reserva:</h4> {{ reservation.ending_date_time }}
 
       {% if correct_user %}
-        <h5>¿Se te perdio?</h5>
+        <h5>Perdiste el articulo?</h5>
         {% if item_type == 'space' %}
           <form action="{% url 'delete_space_reservation' %}" method="post">
         {% else %}
@@ -47,7 +47,6 @@
     {% if caducado %}
         <h4> Recuerda devolver el articulo </h4>
     {% endif %}
-
 
     </div>
 
