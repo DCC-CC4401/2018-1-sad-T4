@@ -58,7 +58,7 @@ def actions_panel(request):
             if request.GET["filter"]=='vigentes':
                 loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
             elif request.GET["filter"]=='caducados':
-                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='P').order_by('starting_date_time')
+                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
             elif request.GET["filter"]=='perdidos':
                 loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='L').order_by('starting_date_time')
             else:
@@ -106,7 +106,7 @@ def actions_panel(request):
 
 
 
-def add_item(request):
+def add_article(request):
 
     if request.method == "POST":
         r_name = request.POST["name"] ##Obligatorio
@@ -119,4 +119,13 @@ def add_item(request):
         new_art.image.save(str(new_art.id)+"_image"+r_extension, r_uploaded_file)
         new_art.save()
 
+    return redirect("/admin/items-panel/")
+
+def add_space(request):
+    if request.method == "POST":
+        r_name = request.POST["name"] ##Obligatorio
+        r_description = request.POST["description"]
+        new_art = Space.objects.create(name=r_name, description = r_description)
+        new_art.state='D'
+        new_art.save()
     return redirect("/admin/items-panel/")
