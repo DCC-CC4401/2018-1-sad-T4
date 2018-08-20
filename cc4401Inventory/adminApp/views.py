@@ -8,6 +8,8 @@ from mainApp.models import User
 from datetime import datetime, timedelta, date
 import pytz, os
 from django.utils.timezone import localtime
+from itertools import chain
+from operator import attrgetter
 
 
 @login_required
@@ -48,28 +50,39 @@ def actions_panel(request):
 
     colores = {'A': 'rgba(0,153,0,0.7)',
                'P': 'rgba(51,51,204,0.7)',
-                'R': 'rgba(153, 0, 0,0.7)'}
+               'R': 'rgba(153, 0, 0,0.7)'}
 
-    reservations = SpaceReservation.objects.filter(state='P').order_by('starting_date_time')
-    current_week_reservations = SpaceReservation.objects.filter(starting_date_time__week = current_week)
+    space_reservations = SpaceReservation.objects.filter(state='P').order_by('starting_date_time')
+    article_reservations = ArticleReservation.objects.filter(state='P').order_by('starting_date_time')
+    reservations = list(chain(space_reservations, article_reservations))
+    current_week_space_reservations = SpaceReservation.objects.filter(starting_date_time__week=current_week)
     actual_date = datetime.now(tz=pytz.utc)
     try:
         if request.method == "GET":
-            if request.GET["filter"]=='vigentes':
-                loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
-            elif request.GET["filter"]=='caducados':
-                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
-            elif request.GET["filter"]=='perdidos':
-                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='L', state= 'L').order_by('starting_date_time')
+            if request.GET["filter"] == 'vigentes':
+                article_loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
+                space_loans = SpaceReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
+            elif request.GET["filter"] == 'caducados':
+                article_loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
+                                                                  finish_state='I')
+                space_loans = SpaceReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
+                                                              finish_state='I')
+            elif request.GET["filter"] == 'perdidos':
+                article_loans = ArticleReservation.objects.filter(finish_state='L')
+                space_loans = SpaceReservation.objects.filter(finish_state='L')
             else:
-                loans = ArticleReservation.objects.all().order_by('starting_date_time')
+                article_loans = ArticleReservation.objects.all()
+                space_loans = SpaceReservation.objects.all()
+        loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
     except:
-        loans = ArticleReservation.objects.all().order_by('starting_date_time')
+        article_loans = ArticleReservation.objects.all()
+        space_loans = SpaceReservation.objects.all()
+        loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
 
     res_list = []
     for i in range(5):
         res_list.append(list())
-    for r in current_week_reservations:
+    for r in current_week_space_reservations:
         reserv = list()
         reserv.append(r.space.name)
         reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))
