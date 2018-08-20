@@ -17,12 +17,10 @@
       <h1 class="article-name">
         Detalles de la Reserva de {{ item.name }}
 
-        {% if item.state == "D" %}
-          <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
         {% elif item.state == "P" %}
-          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  reservation.get_state_display }}</span>
         {% elif item.state == "R" %}
-          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  reservation.get_state_display }}</span>
         {% endif %}
        </h1>
 
