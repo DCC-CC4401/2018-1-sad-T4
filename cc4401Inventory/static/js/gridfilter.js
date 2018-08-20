@@ -22,8 +22,7 @@ function create_space_filter(){
      var child = f[index].children[0].id
      var ch_id = child[1]
      var ch_name = f[index].innerText
-     selectorNode = document.getElementById(child)
-     selectorNode.parentElement.addEventListener("click", clickFilter)
+     $('#'+child).on("click",clickFilter)
      nombres[child] = ch_name;
 
 
@@ -31,13 +30,13 @@ function create_space_filter(){
 }
 
 function clickFilter(element){
-  if(element.target.nodeName=="I"){
-    if(element.target.className=="fas fa-circle"){
-      delete selected_filter[element.target.id]
-      element.target.className = "far fa-circle"
+  if(element.currentTarget.nodeName=="I"){
+    if(element.currentTarget.className=="fas fa-circle"){
+      delete selected_filter[element.currentTarget.id]
+      element.currentTarget.className = "far fa-circle"
     } else {
-        selected_filter[element.target.id] = nombres[element.target.id]
-        element.target.className = "fas fa-circle"
+        selected_filter[element.currentTarget.id] = nombres[element.currentTarget.id]
+        element.currentTarget.className = "fas fa-circle"
     }
   }
 
@@ -60,7 +59,7 @@ function clickFilter(element){
     }
 
   }
-  console.log(selected_filter)
+  
 }
 
 function create_selectable_slots(){
@@ -75,19 +74,24 @@ function create_selectable_slots(){
         var listNode = document.createElement("LI")
         var listDiv = document.createElement("div")
         listDiv.classList.add("selectable_slot")
-        listDiv.setAttribute("id", "slot"+i+"_"+j)
+        var newId = "slot"+i+"_"+j
+        listDiv.setAttribute("id", newId)
         listDiv.style.width = slotWidth+"px";
         listDiv.style.height = slotHeight+"px";
-        listDiv.addEventListener("click",clickSlot)
+        //listDiv.addEventListener("click",clickSlot)
+
         listNode.appendChild(listDiv)
         day.appendChild(listNode)
+        $('#'+newId).on("click",clickSlot)
 
       }
    }
 }
 
 function clickSlot(element){
-  var idSlot = element.explicitOriginalTarget.id;
+
+  var idSlot = element.currentTarget.id;
+
   var newi = idSlot[4];
   var newj = idSlot.substr(6);
   var slotDiv = document.getElementById(idSlot);
@@ -180,5 +184,5 @@ function isEmpty( obj ) {
 
 
 //'MAIN'
-create_selectable_slots()
-create_space_filter()
+$( window ).on( "load", create_selectable_slots() )
+$( window ).on( "load", create_space_filter() )
