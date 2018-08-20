@@ -92,7 +92,9 @@ class Action(models.Model):
     starting_date_time = models.DateTimeField()
     ending_date_time = models.DateTimeField()
     state = models.CharField('Estado', choices=STATES, max_length=1, default='P')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
+    admin = models.ForeignKey(User, limit_choices_to={'is_staff': True}, null=True, blank=True,
+                              on_delete=models.CASCADE, related_name='%(class)s_admin')
 
     class Meta:
         abstract = True
