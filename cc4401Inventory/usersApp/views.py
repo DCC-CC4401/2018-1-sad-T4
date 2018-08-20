@@ -5,7 +5,6 @@ from mainApp.models import User
 from django.contrib import messages
 
 from spaceReservationsApp.models import SpaceReservation
-
 from articleReservationsApp.models import ArticleReservation
 
 
@@ -81,12 +80,16 @@ def logout_view(request):
 def user_data(request, user_id):
     try:
         user = User.objects.get(id=user_id)
-        reservations = SpaceReservation.objects.filter(user = user_id).order_by('-starting_date_time')[:10]
-        loans = ArticleReservation.objects.filter(user = user_id).order_by('-starting_date_time')[:10]
+        s_reservations = SpaceReservation.objects.filter(user = user_id,state='P').order_by('-starting_date_time')[:10]
+        a_reservations = ArticleReservation.objects.filter(user = user_id, state='P').order_by('-starting_date_time')[:10]
+        s_loans = SpaceReservation.objects.filter(user = user_id, state='A').order_by('-starting_date_time')[:10]
+        a_loans = ArticleReservation.objects.filter(user = user_id, state='A').order_by('-starting_date_time')[:10]
         context = {
             'user': user,
-            'reservations': reservations,
-            'loans': loans
+            's_reservations': s_reservations,
+            'a_reservations': a_reservations,
+            'a_loans': a_loans,
+            's_loans': s_loans,
         }
         return render(request, 'usersApp/user_profile.html', context)
     except Exception:
