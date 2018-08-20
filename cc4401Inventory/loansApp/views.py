@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from spaceReservationsApp.models import SpaceReservation
 from articleReservationsApp.models import ArticleReservation
 from django.contrib import messages
+import datetime
+import pytz
+
+utc=pytz.UTC
+
 
 
 def show_space_loan(request, reservation_id):
@@ -21,7 +26,9 @@ def show_reservation(request, reservation_id, item_type):
             'reservation': reservation,
             'item': item,
             'item_type': item_type,
-            'correct_user': (request.user == reservation.user),
+            'correct_user': (request.user == reservation.user and reservation.finish_state == 'I'),
+            'caducado': (datetime.datetime.now().replace(tzinfo=utc) > reservation.ending_date_time.replace(tzinfo=utc)
+                         and reservation.finish_state == 'I'),
         }
         if reservation.state == 'A':
             return render(request, 'loan_data.html', context=context)
@@ -45,7 +52,8 @@ def delete_reservation(request, item_type):
             for reservation_id in reservation_ids:
                 reservation = reservation_type.objects.get(id=reservation_id)
                 if reservation.state == 'A' and request.user == reservation.user:
-                    reservation.state = 'P' #debe ser finish state el que cambia
+                    reservation.finish_state = 'L'
+                    reservation.save()
         except:
             messages.warning(request, 'Ha ocurrido un error y la reserva no se ha eliminado')
 
