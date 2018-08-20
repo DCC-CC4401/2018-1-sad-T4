@@ -8,6 +8,7 @@ from mainApp.models import User
 from datetime import datetime, timedelta, date
 import pytz, os
 from django.utils.timezone import localtime
+from itertools import chain
 
 
 @login_required
@@ -48,18 +49,20 @@ def actions_panel(request):
 
     colores = {'A': 'rgba(0,153,0,0.7)',
                'P': 'rgba(51,51,204,0.7)',
-                'R': 'rgba(153, 0, 0,0.7)'}
+               'R': 'rgba(153, 0, 0,0.7)'}
 
-    reservations = SpaceReservation.objects.filter(state='P').order_by('starting_date_time')
-    current_week_reservations = SpaceReservation.objects.filter(starting_date_time__week = current_week)
+    space_reservations = SpaceReservation.objects.filter(state='P').order_by('starting_date_time')
+    article_reservations = ArticleReservation.objects.filter(state='P').order_by('starting_date_time')
+    reservations = list(chain(space_reservations, article_reservations))
+    current_week_space_reservations = SpaceReservation.objects.filter(starting_date_time__week=current_week)
     actual_date = datetime.now(tz=pytz.utc)
     try:
         if request.method == "GET":
-            if request.GET["filter"]=='vigentes':
+            if request.GET["filter"] == 'vigentes':
                 loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
-            elif request.GET["filter"]=='caducados':
-                loans = Loan.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
-            elif request.GET["filter"]=='perdidos':
+            elif request.GET["filter"] == 'caducados':
+                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
+            elif request.GET["filter"] == 'perdidos':
                 loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='L', state= 'L').order_by('starting_date_time')
             else:
                 loans = ArticleReservation.objects.all().order_by('starting_date_time')
@@ -69,7 +72,7 @@ def actions_panel(request):
     res_list = []
     for i in range(5):
         res_list.append(list())
-    for r in current_week_reservations:
+    for r in current_week_space_reservations:
         reserv = list()
         reserv.append(r.space.name)
         reserv.append(localtime(r.starting_date_time).strftime("%H:%M"))
