@@ -9,6 +9,14 @@ from django.contrib import messages
 import json
 
 @login_required
+def landing_redirect(request):
+    context = {}
+    if not request.user.is_staff:
+        return landing_articles(request)
+    else:
+        return redirect('landing-panel')
+
+@login_required
 def landing_articles(request):
     context = {}
     return render(request, 'articulos.html', context)
