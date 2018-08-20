@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, date
 import pytz, os
 from django.utils.timezone import localtime
 from itertools import chain
+from operator import attrgetter
 
 
 @login_required
@@ -59,15 +60,24 @@ def actions_panel(request):
     try:
         if request.method == "GET":
             if request.GET["filter"] == 'vigentes':
-                loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date).order_by('starting_date_time')
+                article_loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
+                space_loans = SpaceReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
             elif request.GET["filter"] == 'caducados':
-                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='P', state = 'P').order_by('starting_date_time')
+                article_loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
+                                                                  finish_state='I')
+                space_loans = SpaceReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
+                                                              finish_state='I')
             elif request.GET["filter"] == 'perdidos':
-                loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, article__state='L', state= 'L').order_by('starting_date_time')
+                article_loans = ArticleReservation.objects.filter(finish_state='L')
+                space_loans = SpaceReservation.objects.filter(finish_state='L')
             else:
-                loans = ArticleReservation.objects.all().order_by('starting_date_time')
+                article_loans = ArticleReservation.objects.all()
+                space_loans = SpaceReservation.objects.all()
+        loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
     except:
-        loans = ArticleReservation.objects.all().order_by('starting_date_time')
+        article_loans = ArticleReservation.objects.all()
+        space_loans = SpaceReservation.objects.all()
+        loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
 
     res_list = []
     for i in range(5):

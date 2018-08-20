@@ -90,10 +90,10 @@
               <tr>
                 <td><input type="checkbox" name="selected" value="{{ loan.get_item_type }}-{{ loan.id }}"></td>
                 <td>{{ loan.id }}</td>
-                <td>{{ loan.article.name }}</td>
+                <td>{{ loan.get_item_name }}</td>
                 <td>{{ loan.user.get_full_name }}</td>
                 <td>{{ loan.starting_date_time }}</td>
-                <td>{{ loan.get_state_display }}</td>
+                <td>{{ loan.get_finish_state_display }}</td>
               </tr>
               {% endfor %}
           </tbody>
