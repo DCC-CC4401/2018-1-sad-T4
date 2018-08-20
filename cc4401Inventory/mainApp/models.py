@@ -86,12 +86,17 @@ class Action(models.Model):
         ('A', 'Aceptado'),
         ('R', 'Rechazado'),
         ('P', 'Pendiente'),
+    )
+    FINISH_STATES = (
         ('L', 'Perdido'),
         ('E', 'Recibido'),
+        ('I', 'Indefinido'),
     )
     starting_date_time = models.DateTimeField()
     ending_date_time = models.DateTimeField()
     state = models.CharField('Estado', choices=STATES, max_length=1, default='P')
+    finish_state = models.CharField('Estado de finalización', choices=FINISH_STATES,
+                                    max_length=1, default='I')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(class)s_user')
     admin = models.ForeignKey(User, limit_choices_to={'is_staff': True}, null=True, blank=True,
                               on_delete=models.CASCADE, related_name='%(class)s_admin')
