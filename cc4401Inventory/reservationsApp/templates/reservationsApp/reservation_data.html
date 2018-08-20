@@ -17,12 +17,10 @@
       <h1 class="article-name">
         Detalles de la Reserva de {{ item.name }}
 
-        {% if item.state == "D" %}
-          <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
-        {% elif item.state == "P" %}
-          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+        {% if item.state == "P" %}
+          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  reservation.get_state_display }}</span>
         {% elif item.state == "R" %}
-          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  reservation.get_state_display }}</span>
         {% endif %}
        </h1>
 
@@ -34,12 +32,14 @@
       {% if correct_user %}
         <h5>¿Te arrepentiste? Aún puedes cancelar! :)</h5>
         {% if item_type == 'space' %}
-          <form action="{% url 'delete_space_reservation' %}" method="post">
+          <form action="/reservation/delete/" method="post">
+            <input type="hidden" name="reservation" value="s{{ reservation.id }}">
         {% else %}
-          <form action="{% url 'delete_article_reservation' %}" method="post">
+          <form action="/reservation/delete/" method="post">
+            <input type="hidden" name="reservation" value="a{{ reservation.id }}">
         {% endif %}
           {% csrf_token %}
-          <input type="hidden" name="reservation" value={{ reservation.id }}>
+
           <input type="submit" value="Borrar">
         </form>
       {% endif %}

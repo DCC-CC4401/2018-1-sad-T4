@@ -3,6 +3,7 @@ from spaceReservationsApp.models import SpaceReservation
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import os
+from django.contrib import messages
 
 @login_required
 def space_data(request, space_id):
@@ -29,11 +30,15 @@ def space_edit_name(request, space_id):
 def space_edit_image(request, space_id):
 
     if request.method == "POST":
-        u_file = request.FILES["image"]
-        extension = os.path.splitext(u_file.name)[1]
         a = Space.objects.get(id=space_id)
-        a.image.save(str(space_id)+"_image"+extension, u_file)
-        a.save()
+        try:
+            u_file = request.FILES["image"]
+            extension = os.path.splitext(u_file.name)[1]
+            a.image.save(str(space_id) + "_image" + extension, u_file)
+            a.save()
+        except Exception as e:
+            messages.warning(request, 'No se ha podido cambiar la imagen,'
+                                      ' asegúrese de ingresar una imagen válida')
 
     return redirect('/space/' + str(space_id))
 

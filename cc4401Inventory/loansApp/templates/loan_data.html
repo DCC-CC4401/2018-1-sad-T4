@@ -17,12 +17,12 @@
       <h1 class="article-name">
         Detalles del Préstamo de {{ item.name }}
 
-        {% if item.state == "D" %}
-          <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
-        {% elif item.state == "P" %}
-          <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
-        {% elif item.state == "R" %}
-          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  item.get_state_display }}</span>
+        {% if reservation.finish_state == "E" %}
+          <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  reservation.get_finish_state_display }}</span>
+        {% elif reservation.finish_state == "I" %}
+          <span class="badge badge-pill badge-warning"><i class="fas fa-chevron-left"></i> {{  reservation.get_finish_state_display }}</span>
+        {% elif reservation.finish_state == "L" %}
+          <span class="badge badge-pill badge-danger"><i class="fas fa-chevron-left"></i> {{  reservation.get_finish_state_display }}</span>
         {% endif %}
        </h1>
 
@@ -43,6 +43,11 @@
           <input type="submit" value="Lo perdí">
         </form>
       {% endif %}
+
+    {% if caducado %}
+        <h4> Recuerda devolver el articulo </h4>
+    {% endif %}
+
     </div>
 
     <div class="col-md-6 offset-md-1">
