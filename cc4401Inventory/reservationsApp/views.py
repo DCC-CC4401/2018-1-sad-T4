@@ -13,6 +13,7 @@ def show_article_reservation(request, reservation_id):
 
 
 def show_reservation(request, reservation_id, item_type):
+
     if request.method == 'GET':
         reservation_type = SpaceReservation if item_type == 'space' else ArticleReservation
         reservation = reservation_type.objects.get(id=reservation_id)
@@ -23,12 +24,13 @@ def show_reservation(request, reservation_id, item_type):
             'item_type': item_type,
             'correct_user': (request.user == reservation.user),
         }
+        
         if reservation.state == 'P':
             return render(request, 'reservationsApp/reservation_data.html', context=context)
         else:
             return redirect('landing_articles')
 
-
+# DEPRECATED
 def delete_space_reservation(request):
     return delete_reservation(request, 'space')
 
@@ -37,13 +39,13 @@ def delete_article_reservation(request):
     return delete_reservation(request, 'article')
 
 
-def delete_reservation(request, item_type):
+def delete_reservation(request):
     if request.method == 'POST':
         reservation_ids = request.POST.getlist('reservation')
-        reservation_type = SpaceReservation if item_type == 'space' else ArticleReservation
         try:
             for reservation_id in reservation_ids:
-                reservation = reservation_type.objects.get(id=reservation_id)
+                reservation_type = SpaceReservation if reservation_id[0]=='s' else ArticleReservation
+                reservation = reservation_type.objects.get(id=reservation_id[1:])
                 if reservation.state == 'P' and request.user == reservation.user:
                     reservation.delete()
         except:
