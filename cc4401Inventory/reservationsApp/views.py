@@ -44,7 +44,7 @@ def delete_reservation(request, item_type):
         try:
             for reservation_id in reservation_ids:
                 reservation = reservation_type.objects.get(id=reservation_id)
-                if reservation.state == 'P':
+                if reservation.state == 'P' and request.user == reservation.user:
                     reservation.delete()
         except:
             messages.warning(request, 'Ha ocurrido un error y la reserva no se ha eliminado')
