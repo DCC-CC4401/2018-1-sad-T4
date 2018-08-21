@@ -90,7 +90,7 @@ def actions_panel(request):
     delta = (datetime.strptime(current_date, "%Y-%m-%d").isocalendar()[2]) - 1
     monday = (
         (datetime.strptime(current_date, "%Y-%m-%d") - timedelta(days=delta)).strftime("%d/%m/%Y"))
-
+    spaces = Space.objects.all()
 
     context = {
         'reservations_query': reservations,
@@ -98,7 +98,8 @@ def actions_panel(request):
         'reservations': res_list,
         'current_date': current_date,
         'controls': move_controls,
-        'actual_monday': monday
+        'actual_monday': monday,
+        'spaces': spaces
     }
     return render(request, 'actions_panel.html', context)
 

@@ -181,7 +181,7 @@
                             <div class="row">
 
                                 <!-- Nombre, Estado-->
-                                <div class="col-lg-3">
+                                <div class="col-lg-7 offset-3">
                                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
                                          aria-orientation="vertical">
 
@@ -213,46 +213,7 @@
                                 </div>
 
                                 <!-- Contenido de cada objeto y/o espacio del resumen de reservas-->
-                                <div class="col-lg-9">
-                                    <div class="card mt-4">
-                                        <div class="card-body">
-                                            <div class="tab-content" id="v-pills-tabContent">
 
-                                                {% for loan in a_loans %}
-
-                                                    <div class="tab-pane fade show {% if forloop.counter0 == 0 %}
-                                                    active {% endif %}"
-                                                         id="v-pills-{{ loan.pk }}"
-                                                         role="tabpanel"
-                                                         aria-labelledby="v-pills-{{ loan.pk }}-tab">
-
-                                                        <div class="d-flex w-100 justify-content-between">
-                                                            <h2 class="mb-1">{{ loan.article.name }}</h2>
-                                                            <medium><strong>{{ loan.starting_date_time }}</strong>
-                                                            </medium>
-                                                        </div>
-                                                        <medium class="text-muted">{{ loan.get_state_display }}</medium>
-
-                                                        <!-- Imagen de los préstamos-->
-                                                        {% if loan.article.image %}
-                                                            <img src=" {% static loan.article.image.url %}"
-                                                                 class="img-fluid"
-                                                                 alt="Foto"
-                                                                 style="height: 900px"/>
-                                                        {% else %}
-                                                            <img class="card-img-top img-fluid"
-                                                                 src="{% static 'img/items/default_article.jpg' %}"
-                                                                 alt="Card image cap">
-                                                        {% endif %}
-
-                                                        <p>{{ loan.article.description }}</p>
-                                                    </div>
-                                                {% endfor %}
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
 
