@@ -1,0 +1,170 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
+    <link rel="stylesheet" href="{% static 'mainApp/css/gridfilter.css' %}">
+</head>
+<div class="cd-schedule loading">
+	<div class="timeline" id="timeline">
+		<ul>
+			<li><span>09:00</span></li>
+			<li><span>09:30</span></li>
+			<li><span>10:00</span></li>
+			<li><span>10:30</span></li>
+			<li><span>11:00</span></li>
+			<li><span>11:30</span></li>
+			<li><span>12:00</span></li>
+			<li><span>12:30</span></li>
+			<li><span>13:00</span></li>
+			<li><span>13:30</span></li>
+			<li><span>14:00</span></li>
+			<li><span>14:30</span></li>
+			<li><span>15:00</span></li>
+			<li><span>15:30</span></li>
+			<li><span>16:00</span></li>
+			<li><span>16:30</span></li>
+			<li><span>17:00</span></li>
+			<li><span>17:30</span></li>
+			<li><span>18:00</span></li>
+		</ul>
+	</div> <!-- .timeline -->
+	<div id="line-container" class="line-container">
+	<div id="line" class="clock"></div><div class="message" id="message"></div>
+		</div>
+	<div class="events" id="events">
+		<ul>
+			<li class="events-group">
+				<div class="top-info"><span>Lunes</span></div>
+
+				<ul id="gridlist0">
+					{% for r in reservations.0 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+
+				</ul>
+			</li>
+
+			<li class="events-group">
+				<div class="top-info"><span>Martes</span></div>
+
+				<ul id="gridlist1">
+
+					{% for r in reservations.1 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group">
+				<div class="top-info"><span>Miércoles</span></div>
+
+				<ul id="gridlist2">
+					{% for r in reservations.2 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group">
+				<div class="top-info"><span>Jueves</span></div>
+
+				<ul id="gridlist3">
+					{% for r in reservations.3 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}" sname="{{r.0}}">
+						<a href="">
+							<em class="event-name">{{r.0}} </em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+
+			<li class="events-group">
+				<div class="top-info"><span>Viernes</span></div>
+
+				<ul id="gridlist4">
+					{% for r in reservations.4 %}
+
+					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+						<a href="">
+							<em class="event-name">{{r.0}}</em>
+						</a>
+					</li>
+
+					{% endfor%}
+				</ul>
+			</li>
+		</ul>
+
+	</div>
+
+
+<div>
+
+	<div class="week-select" id="week-select">
+		<div style="text-align: center; margin-right: auto; margin-left: auto; width: 200px; font-size: 18px; margin-bottom:20px;">
+			<form action="" method="get" class="selectform">
+				<a href="?date={{controls.0}}" role="button"><i class="fas fa-angle-double-left"></i></a>
+			</form>
+			<form action="" method="get" class="selectform">
+				<a href="?date={{controls.1}}" role="button"><i class="fas fa-angle-left"></i></a>
+			</form>
+			<form action="" method="get" class="selectform">
+				<a href="?date={{controls.2}}" role="button"><i class="fas fa-angle-right"></i></a>
+			</form>
+			<form action="" method="get" class="selectform">
+				<a href="?date={{controls.3}}" role="button"><i class="fas fa-angle-double-right"></i></a>
+			</form>
+		</div>
+    <div class="row">
+      <div class="col-7"></div>
+      <div class="col-5">
+      <form action="/spaces/make-space-reservations/" method="post">
+        <input type="hidden" name="horarios" value="" id="toReserve">
+        {% csrf_token %}
+        <input type="hidden" name="espacio" value="{{space.id}}">
+      <button type="submit" class="btn btn-primary"  onclick="createReservations()">
+        Reservar en horario(s) seleccionado(s)
+      </button>
+      </form>
+    </div>
+  </div>
+	</div>
+
+</div>
+
+	<div class="cover-layer"></div>
+
+</div> <!-- .cd-schedule -->
+
+
+<script type="text/javascript">
+var actual_monday = "{{actual_monday}}"
+</script>
+<script src="{% static 'js/modernizr.js' %}"></script>
+<script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+
+<script src="{% static 'js/main.js' %}"></script> <!-- Resource jQuery -->
+{% if user.is_staff %}
+{% else %}
+<script src="{% static 'js/gridselect.js' %}"></script>
+{% endif %}

@@ -24,7 +24,7 @@ def show_reservation(request, reservation_id, item_type):
             'item_type': item_type,
             'correct_user': (request.user == reservation.user),
         }
-        
+
         if reservation.state == 'P':
             return render(request, 'reservationsApp/reservation_data.html', context=context)
         else:
