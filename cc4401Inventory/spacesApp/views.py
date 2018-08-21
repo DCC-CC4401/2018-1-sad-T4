@@ -60,7 +60,7 @@ def space_delete(request, space_id):
     try:
         space = Space.objects.get(id=space_id)
         space.delete()
-        space.save()
+        
         return redirect('items-panel')
     except Exception as e:
         print(e)

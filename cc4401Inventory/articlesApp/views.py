@@ -147,7 +147,7 @@ def article_delete(request, article_id):
     try:
         article = Article.objects.get(id=article_id)
         article.delete()
-        article.save()
+        
         return redirect('items-panel')
     except Exception as e:
         print(e)
