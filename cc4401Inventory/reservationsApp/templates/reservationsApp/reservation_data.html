@@ -14,8 +14,13 @@
 
   <div class="row">
     <div class="col-md-4">
-      <h1 class="article-name">
-        Detalles de la Reserva de {{ item.name }}
+      <h1 class="reservation-title">
+        Detalles de la Reserva de
+        {% if reservation.get_item_type == 'space' %}
+          <a href="{% url 'space_data' reservation.space.id %}">{{ reservation.get_item_name }}</a>
+        {% else %}
+          <a href="{% url 'article_data' reservation.article.id %}">{{ reservation.get_item_name }}</a>
+        {% endif %}
 
         {% if item.state == "P" %}
           <span class="badge badge-pill badge-primary"><i class="fas fa-chevron-left"></i> {{  reservation.get_state_display }}</span>
@@ -24,18 +29,18 @@
         {% endif %}
        </h1>
 
-      <h4>Usuario: {{ reservation.user.get_full_name }}</h4>
+      <h4 class="reservation-detail">Usuario: {{ reservation.user.get_full_name }}</h4>
 
-      <h4>Inicio de la Reserva: </h4> {{  reservation.starting_date_time }}
-      <h4>Fin de la Reserva:</h4> {{ reservation.ending_date_time }}
+      <h4 class="reservation-detail">Inicio de la Reserva: <br> {{  reservation.starting_date_time }}</h4>
+      <h4 class="reservation-detail">Fin de la Reserva: <br> {{ reservation.ending_date_time }}</h4>
 
       {% if correct_user %}
-        <h5>¿Te arrepentiste? Aún puedes cancelar! :)</h5>
-        <form action="{% url 'delete_reservation' %}" method="post">
+        <h5 class="regret-title">¿Te arrepentiste? Aún puedes cancelar! :)</h5>
+        <form class="regret-form" action="{% url 'delete_reservation' %}" method="post">
           <input type="hidden" name="reservation" value="{{ reservation.get_item_type }}-{{ reservation.id }}">
           {% csrf_token %}
 
-          <input type="submit" value="Borrar">
+          <input class="btn btn-danger" type="submit" value="Borrar">
         </form>
       {% endif %}
     </div>
