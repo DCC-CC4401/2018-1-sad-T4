@@ -92,5 +92,6 @@ def user_data(request, user_id):
             's_loans': s_loans,
         }
         return render(request, 'usersApp/user_profile.html', context)
-    except Exception:
+    except Exception as e:
+        print(e)
         return redirect('/')
