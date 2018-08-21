@@ -60,8 +60,8 @@ def actions_panel(request):
     try:
         if request.method == "GET":
             if request.GET["filter"] == 'vigentes':
-                article_loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
-                space_loans = SpaceReservation.objects.filter(ending_date_time__gt=actual_date, state='A')
+                article_loans = ArticleReservation.objects.filter(ending_date_time__gt=actual_date, state='A', finish_state='I')
+                space_loans = SpaceReservation.objects.filter(ending_date_time__gt=actual_date, state='A', finish_state='I')
             elif request.GET["filter"] == 'caducados':
                 article_loans = ArticleReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
                                                                   finish_state='I')
