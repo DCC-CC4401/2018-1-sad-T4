@@ -68,15 +68,15 @@ def actions_panel(request):
                 space_loans = SpaceReservation.objects.filter(ending_date_time__lt=actual_date, state='A',
                                                               finish_state='I')
             elif request.GET["filter"] == 'perdidos':
-                article_loans = ArticleReservation.objects.filter(finish_state='L')
-                space_loans = SpaceReservation.objects.filter(finish_state='L')
-            else:
-                article_loans = ArticleReservation.objects.all()
-                space_loans = SpaceReservation.objects.all()
+                article_loans = ArticleReservation.objects.filter(state='A', finish_state='L')
+                space_loans = SpaceReservation.objects.filter(state='A', finish_state='L')
+            else: # todos
+                article_loans = ArticleReservation.objects.filter(state='A')
+                space_loans = SpaceReservation.object.filter(state='A')
         loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
     except:
-        article_loans = ArticleReservation.objects.all()
-        space_loans = SpaceReservation.objects.all()
+        article_loans = ArticleReservation.objects.filter(state='A')
+        space_loans = SpaceReservation.objects.filter(state='A')
         loans = sorted(chain(article_loans, space_loans), key=attrgetter('starting_date_time'), reverse=True)
 
     res_list = []
