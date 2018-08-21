@@ -31,13 +31,8 @@
 
       {% if correct_user %}
         <h5>¿Te arrepentiste? Aún puedes cancelar! :)</h5>
-        {% if item_type == 'space' %}
-          <form action="/reservation/delete/" method="post">
-            <input type="hidden" name="reservation" value="s{{ reservation.id }}">
-        {% else %}
-          <form action="/reservation/delete/" method="post">
-            <input type="hidden" name="reservation" value="a{{ reservation.id }}">
-        {% endif %}
+        <form action="{% url 'delete_reservation' %}" method="post">
+          <input type="hidden" name="reservation" value="{{ reservation.get_item_type }}-{{ reservation.id }}">
           {% csrf_token %}
 
           <input type="submit" value="Borrar">
