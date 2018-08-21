@@ -30,22 +30,15 @@ def show_reservation(request, reservation_id, item_type):
         else:
             return redirect('landing_articles')
 
-# DEPRECATED
-def delete_space_reservation(request):
-    return delete_reservation(request, 'space')
-
-
-def delete_article_reservation(request):
-    return delete_reservation(request, 'article')
-
 
 def delete_reservation(request):
     if request.method == 'POST':
-        reservation_ids = request.POST.getlist('reservation')
+        reservations = request.POST.getlist('reservation')
         try:
-            for reservation_id in reservation_ids:
-                reservation_type = SpaceReservation if reservation_id[0]=='s' else ArticleReservation
-                reservation = reservation_type.objects.get(id=reservation_id[1:])
+            for reservation in reservations:
+                item_type, item_id = reservation.split('-')
+                reservation_type = SpaceReservation if item_type == 'space' else ArticleReservation
+                reservation = reservation_type.objects.get(id=item_id)
                 if reservation.state == 'P' and request.user == reservation.user:
                     reservation.delete()
         except:
