@@ -67,18 +67,20 @@ def modify_reservations(request):
 
 
 def modify_loans(request):
-    user = request.user
-    if not (user.is_superuser and user.is_staff):
-        return redirect('/')
     if request.method == 'POST':
         selected = request.POST.getlist('selected')
         reservations = []
+        print(request)
         for s in selected:
             item_type, item_id = s.split('-')
             model_type = SpaceReservation if item_type == 'space' else ArticleReservation
             reservations.append(model_type.objects.get(id=item_id))
         new_finish_state = 'E' if (request.POST['accept'] == '1') else 'L'
+        print(reservations)
         for reservation in reservations:
+            if reservation.user != request.user and not request.user.is_staff:
+                pass
+            print(reservation.id)
             reservation.finish_state = new_finish_state
             reservation.save()
     return redirect('/admin/actions-panel')

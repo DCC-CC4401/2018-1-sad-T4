@@ -14,8 +14,13 @@
 
   <div class="row">
     <div class="col-md-4">
-      <h1 class="article-name">
-        Detalles del Préstamo de {{ item.name }}
+      <h1 class="reservation-title">
+        Detalles del Préstamo de
+        {% if reservation.get_item_type == 'space' %}
+          <a href="{% url 'space_data' reservation.space.id %}">{{ reservation.get_item_name }}</a>
+        {% else %}
+          <a href="{% url 'article_data' reservation.article.id %}">{{ reservation.get_item_name }}</a>
+        {% endif %}
 
         {% if reservation.finish_state == "E" %}
           <span class="badge badge-pill badge-success"><i class="fas fa-chevron-left"></i> {{  reservation.get_finish_state_display }}</span>
@@ -26,26 +31,23 @@
         {% endif %}
        </h1>
 
-      <h4>Usuario: {{ reservation.user.get_full_name }}</h4>
+      <h4 class="reservation-detail">Usuario: {{ reservation.user.get_full_name }}</h4>
 
-      <h4>Inicio de la Reserva: </h4> {{  reservation.starting_date_time }}
-      <h4>Fin de la Reserva:</h4> {{ reservation.ending_date_time }}
+      <h4 class="reservation-detail">Inicio de la Reserva: <br> {{  reservation.starting_date_time }}</h4>
+      <h4 class="reservation-detail">Fin de la Reserva:<br> {{ reservation.ending_date_time }}</h4>
 
       {% if correct_user %}
-        <h5>Perdiste el articulo?</h5>
-        {% if item_type == 'space' %}
-          <form action="{% url 'delete_space_reservation' %}" method="post">
-        {% else %}
-          <form action="{% url 'delete_article_reservation' %}" method="post">
-        {% endif %}
+        <h5 class="regret-title">Lo perdiste? :(</h5>
+          <form class="regret-form" action="{% url 'modify_loans' %}" method="post">
           {% csrf_token %}
-          <input type="hidden" name="reservation" value={{ reservation.id }}>
-          <input type="submit" value="Lo perdí">
+          <input type="hidden" name="selected" value={{ reservation.get_item_type }}-{{ reservation.id }}>
+          <input type="hidden" name="accept" value="0">
+          <input class="btn btn-danger" type="submit" value="Lo perdí">
         </form>
       {% endif %}
 
     {% if caducado %}
-        <h4> Recuerda devolver el articulo </h4>
+        <h4> Recuerda devolver el articulo! </h4>
     {% endif %}
 
     </div>
