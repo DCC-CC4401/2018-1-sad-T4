@@ -1,0 +1,17 @@
+#space-select {
+    margin-right: 10%;
+}
+
+.space-select-list {
+    margin-bottom: 50px;
+}
+
+.SpcSelectListElement {
+    font-size: 15px;
+}
+
+.SpcSelectListElement i.fa-circle {
+    font-size: 15px;
+    margin-right: 5px;
+    margin-left: 15px;
+}

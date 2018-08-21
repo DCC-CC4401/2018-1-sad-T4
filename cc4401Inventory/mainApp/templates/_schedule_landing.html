@@ -3,6 +3,12 @@
     <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
     <link rel="stylesheet" href="{% static 'mainApp/css/gridfilter.css' %}">
 </head>
+
+<div class="space-select" id="space-select">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#resModal" onclick="createReservations()">
+    Reservar en horario(s) seleccionado(s)
+  </button>
+</div>
 <div class="cd-schedule loading">
 	<div class="timeline" id="timeline">
 		<ul>
@@ -151,20 +157,15 @@
 			</form>
 		</div>
     <div class="row">
-      <div class="col-7">
+      <div class="col-12">
         <div class="space-select-list">
         {% for s in spaces %}
-          <span class="SpcSelectListElement" ><i class="far fa-circle" id="s{{s.id}}_selector"></i>{{s.name}}</span>
+          <span class="SpcSelectListElement" ><i class="far fa-circle space-selector" id="s{{s.id}}_selector"></i>{{s.name}}</span>
 
         {% endfor %}
       </div>
       </div>
         <div class="col-2">
-    <div class="space-select" id="space-select">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#resModal" onclick="createReservations()">
-        Reservar en horario(s) seleccionado(s)
-      </button>
-    </div>
     </div>
   </div>
 	</div>

@@ -33,8 +33,8 @@
     border-left: 0px !important;
 }
 
-form button[type=submit] {
-    background-color: #79bcb5;
+form button[type=submit], button[type=button] {
+    background-color: #79bcb5 !important;
     color: #fff;
     border: 0px;
 }
