@@ -75,7 +75,7 @@
                                         <!-- Casilla solo en los pendientes -->
                                         {% if reservation.state == 'P' %}
                                             <input id="reservation-{{ reservation.id }}" name="reservation" class="form-check-input"
-                                                   type="checkbox" value="s{{ reservation.id }}">
+                                                   type="checkbox" value="{{ reservation.get_item_type }}-{{ reservation.id }}">
                                         {% endif %}
                                         <label for="reservation-{{ reservation.id }}">
                                             {{ reservation.space.name }} <span
