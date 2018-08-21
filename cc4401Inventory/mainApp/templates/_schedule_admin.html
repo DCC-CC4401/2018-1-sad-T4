@@ -1,8 +1,4 @@
 {% load static %}
-<head>
-    <link rel="stylesheet" href="{% static 'mainApp/css/schedule_reset.css' %}"> <!-- CSS reset -->
-    <link rel="stylesheet" href="{% static 'mainApp/css/gridfilter.css' %}">
-</head>
 <div class="cd-schedule loading">
 	<div class="timeline" id="timeline">
 		<ul>
@@ -151,7 +147,7 @@
 			</form>
 		</div>
     <div class="row">
-      <div class="col-7">
+      <div class="col-12">
         <div class="space-select-list">
         {% for s in spaces %}
           <span class="SpcSelectListElement" ><i class="far fa-circle" id="s{{s.id}}_selector"></i>{{s.name}}</span>
