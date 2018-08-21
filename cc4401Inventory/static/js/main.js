@@ -18,6 +18,7 @@ jQuery(document).ready(function($){
 		this.eventsWrapper = this.element.find('.events');
 		this.eventsGroup = this.eventsWrapper.find('.events-group');
 		this.singleEvents = this.eventsGroup.find('.single-event');
+		console.log(this.singleEvents)
 		this.eventSlotHeight = this.eventsGroup.eq(0).children('.top-info').outerHeight();
 		console.log(this.eventSlotHeight)
 		this.modal = this.element.find('.event-modal');
@@ -67,7 +68,7 @@ jQuery(document).ready(function($){
 		this.singleEvents.each(function(){
 			//create the .event-date element for each event
 			var durationLabel = '<span class="event-date">'+$(this).data('start')+' - '+$(this).data('end')+'</span>';
-			$(this).children('a').prepend($(durationLabel));
+			$(this).prepend($(durationLabel));
 
 			//detect click on the event and open the modal
 			$(this).on('click', 'a', function(event){

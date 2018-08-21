@@ -37,12 +37,15 @@
 
 				<ul id="gridlist0">
 					{% for r in reservations.0 %}
-
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
-						<a href="">
-							<em class="event-name">{{r.0}}</em>
+            {% if r.4.state == 'P' %}
+						  <a href="{% url 'show_space_reservation' r.4.id %}">
+            {% else %}
+						  <a href="{% url 'show_space_loan' r.4.id %}">
+            {% endif %}
+              <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+		  					<em class="event-name">{{r.0}}</em>
+    					</li>
 						</a>
-					</li>
 
 					{% endfor%}
 
@@ -55,12 +58,15 @@
 				<ul id="gridlist1">
 
 					{% for r in reservations.1 %}
-
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
-						<a href="">
-							<em class="event-name">{{r.0}}</em>
+            {% if r.4.state == 'P' %}
+						  <a href="{% url 'show_space_reservation' r.4.id %}">
+            {% else %}
+						  <a href="{% url 'show_space_loan' r.4.id %}">
+            {% endif %}
+              <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+		  					<em class="event-name">{{r.0}}</em>
+    					</li>
 						</a>
-					</li>
 
 					{% endfor%}
 				</ul>
@@ -71,12 +77,15 @@
 
 				<ul id="gridlist2">
 					{% for r in reservations.2 %}
-
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
-						<a href="">
-							<em class="event-name">{{r.0}}</em>
+            {% if r.4.state == 'P' %}
+						  <a href="{% url 'show_space_reservation' r.4.id %}">
+            {% else %}
+						  <a href="{% url 'show_space_loan' r.4.id %}">
+            {% endif %}
+              <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+		  					<em class="event-name">{{r.0}}</em>
+    					</li>
 						</a>
-					</li>
 
 					{% endfor%}
 				</ul>
@@ -87,12 +96,15 @@
 
 				<ul id="gridlist3">
 					{% for r in reservations.3 %}
-
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}"  bgcolor="{{r.3}}" sname="{{r.0}}">
-						<a href="">
-							<em class="event-name">{{r.0}} </em>
+            {% if r.4.state == 'P' %}
+						  <a href="{% url 'show_space_reservation' r.4.id %}">
+            {% else %}
+						  <a href="{% url 'show_space_loan' r.4.id %}">
+            {% endif %}
+              <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+		  					<em class="event-name">{{r.0}}</em>
+    					</li>
 						</a>
-					</li>
 
 					{% endfor%}
 				</ul>
@@ -103,12 +115,15 @@
 
 				<ul id="gridlist4">
 					{% for r in reservations.4 %}
-
-					<li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
-						<a href="">
-							<em class="event-name">{{r.0}}</em>
+            {% if r.4.state == 'P' %}
+						  <a href="{% url 'show_space_reservation' r.4.id %}">
+            {% else %}
+						  <a href="{% url 'show_space_loan' r.4.id %}">
+            {% endif %}
+              <li class="single-event" data-start="{{r.1}}" data-end="{{r.2}}" bgcolor="{{r.3}}" sname="{{r.0}}">
+		  					<em class="event-name">{{r.0}}</em>
+    					</li>
 						</a>
-					</li>
 
 					{% endfor%}
 				</ul>
